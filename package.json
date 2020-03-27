@@ -3,5 +3,8 @@
     "version": "1.0.0",
     "description": "",
     "author": "Joshua Kao",
-    "license": "MIT"
-  }
+    "license": "MIT",
+    "devDependencies": {
+        "serverless-python-requirements": "^5.1.0"
+    }
+}

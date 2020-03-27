@@ -8,6 +8,8 @@ provider:
   stage: ${self:custom.env}
   deploymentBucket:
     name: ${self:custom.deployment_bucket}
+  environment:
+    BUILD_SQS_URL: ${self:custom.build_sqs_url}
   tags:
     account_name: ${self:custom.account_name}
     env: ${self:custom.env}
@@ -23,3 +25,6 @@ functions:
       - http:
           path: buildpr
           method: post
+          
+plugins:
+   - serverless-python-requirements
