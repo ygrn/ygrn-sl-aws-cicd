@@ -12,8 +12,15 @@ def handler(event, context):
         sqs = boto3.client('sqs')
         response = sqs.send_message(
             QueueUrl=os.environ['BUILD_SQS_URL'],
-            MessageBody=event['body']
+            MessageBody=src_zip_url(body)
         )
         print(response)
 
     return {"statusCode": 200}
+
+
+def src_zip_url(body):
+    repo = body['pull_request']['head']['repo']['full_name']
+    branch = body['pull_request']['head']['ref']
+    return "https://github.com/%s/archive/%s.zip" % (repo, branch)
+    
