@@ -23,3 +23,6 @@ functions:
       - http:
           path: buildpr
           method: post
+          
+plugins:
+   - serverless-python-requirements
