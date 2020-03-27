@@ -1,5 +1,6 @@
 import json
 import boto3
+import os
 
 
 def handler(event, context):
@@ -9,7 +10,11 @@ def handler(event, context):
 
     if action in ['opened', 'synchronize']:
         sqs = boto3.client('sqs')
-        print(sqs)
-        print('push to sqs')
+        response = sqs.send_message(
+            QueueUrl=os.environ['BUILD_SQS_URL'],
+            MessageBody='demo'
+        )
+        print(response)
 
+    print('sanity')
     return {"statusCode": 200}
