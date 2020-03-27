@@ -23,4 +23,5 @@ def src_zip_url(body):
     repo = body['pull_request']['head']['repo']['full_name']
     branch = body['pull_request']['head']['ref']
     return "https://github.com/%s/archive/%s.zip" % (repo, branch)
-    
+
+#test
