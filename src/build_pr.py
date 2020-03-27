@@ -12,9 +12,8 @@ def handler(event, context):
         sqs = boto3.client('sqs')
         response = sqs.send_message(
             QueueUrl=os.environ['BUILD_SQS_URL'],
-            MessageBody='demo'
+            MessageBody=event['body']
         )
         print(response)
 
-    print('sanity')
     return {"statusCode": 200}
