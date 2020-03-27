@@ -1,5 +1,5 @@
 custom: ${file(config.yml)}
-service: ${self:custom.deploy_type}-${self:custom.account_name}-${self:custom.project}
+service: ${self:custom.account_name}-${self:custom.project}
 
 provider:
   name: aws
@@ -15,10 +15,10 @@ provider:
     deploy_type: ${self:custom.deploy_type}
 
 functions:
-  build:
-    name: ${self:service}-build-${self:custom.env}
-    handler: src/build.handler
+  buildpr:
+    name: ${self:service}-build-pr-${self:custom.env}
+    handler: src/build_pr.handler
     events:
       - http:
-          path: build
+          path: buildpr
           method: post
