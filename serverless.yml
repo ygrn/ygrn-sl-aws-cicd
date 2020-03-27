@@ -1,6 +1,9 @@
 custom: ${file(config.yml)}
 service: ${self:custom.account_name}-${self:custom.project}
 
+plugins:
+   - serverless-python-requirements
+
 provider:
   name: aws
   runtime: python3.7
@@ -25,6 +28,3 @@ functions:
       - http:
           path: buildpr
           method: post
-          
-plugins:
-   - serverless-python-requirements
