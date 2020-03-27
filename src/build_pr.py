@@ -9,6 +9,7 @@ def handler(event, context):
 
     if action in ['opened', 'synchronize']:
         sqs = boto3.client('sqs')
+        print(sqs)
         print('push to sqs')
 
     return {"statusCode": 200}
