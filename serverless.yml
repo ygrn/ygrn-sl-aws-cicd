@@ -17,6 +17,7 @@ provider:
 functions:
   buildpr:
     name: ${self:service}-build-pr-${self:custom.env}
+    role: ${self:custom.build_role_arn}
     handler: src/build_pr.handler
     events:
       - http:
