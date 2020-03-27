@@ -1,0 +1,9 @@
+# cicd
+project: cicd
+deploy_type: sl
+deployment_bucket: kao-serverless
+env: dev
+
+# aws config
+region: us-west-1
+account_name: kao

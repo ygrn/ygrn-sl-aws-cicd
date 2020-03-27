@@ -1,0 +1,24 @@
+custom: ${file(config.yml)}
+service: ${self:custom.deploy_type}-${self:custom.account_name}-${self:custom.project}
+
+provider:
+  name: aws
+  runtime: python3.7
+  region: ${self:custom.region}
+  stage: ${self:custom.env}
+  deploymentBucket:
+    name: ${self:custom.deployment_bucket}
+  tags:
+    account_name: ${self:custom.account_name}
+    env: ${self:custom.env}
+    project: ${self:custom.project}
+    deploy_type: ${self:custom.deploy_type}
+
+functions:
+  build:
+    name: ${self:service}-build-${self:custom.env}
+    handler: src/build.handler
+    events:
+      - http:
+          path: build
+          method: post
