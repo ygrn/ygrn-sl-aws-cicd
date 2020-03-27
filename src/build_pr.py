@@ -20,7 +20,7 @@ def handler(event, context):
 
 
 def gh_archive_url(body):
-    # builds url to github branch archive zip file
+    # builds url to branch archive .zip
     repo = body['pull_request']['head']['repo']['full_name']
     branch = body['pull_request']['head']['ref']
     return "https://github.com/%s/archive/%s.zip" % (repo, branch)
