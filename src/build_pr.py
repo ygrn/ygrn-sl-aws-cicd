@@ -27,7 +27,7 @@ def handler(event, context):
             )
 
         print(response)
-        return {"statusCode": response['HTTPStatusCode']}
+        return {"statusCode": response['ResponseMetadata']['HTTPStatusCode']}
 
     except Exception as e:
         print("[ERROR]", e)
