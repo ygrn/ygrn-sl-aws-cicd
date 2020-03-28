@@ -3,3 +3,4 @@ config.yml
 node_modules/*
 package-lock.json
 scratch.py
+*/scratch.py

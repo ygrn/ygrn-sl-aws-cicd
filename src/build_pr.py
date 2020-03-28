@@ -1,7 +1,7 @@
 import json
 import boto3
 import os
-from gh_webhook_utils import GithubWebhookUtils as ghw
+from gh_webhook_utils import GithubWebhookUtils
 
 def handler(event, context):
     body = json.loads(event['body'])
@@ -14,7 +14,7 @@ def handler(event, context):
             sqs = boto3.client('sqs')
             response = sqs.send_message(
                 QueueUrl=os.environ['BUILD_SQS_URL'],
-                MessageBody=ghw.feature_archive_url(body)
+                MessageBody=GithubWebhookUtils.feature_archive_url(body)
             )
             print(response)
 
@@ -22,7 +22,7 @@ def handler(event, context):
             sqs = boto3.client('sqs')
             response = sqs.send_message(
                 QueueUrl=os.environ['BUILD_SQS_URL'],
-                MessageBody=ghw.dev_archive_url(body)
+                MessageBody=GithubWebhookUtils.dev_archive_url(body)
             )
             print(response)
 
