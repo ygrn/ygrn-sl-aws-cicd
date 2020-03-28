@@ -5,7 +5,6 @@ import os
 
 def handler(event, context):
     body = json.loads(event['body'])
-    print(body)
 
     action = body['action']
     repo = body['pull_request']['head']['repo']['full_name']
@@ -13,23 +12,22 @@ def handler(event, context):
     print(action, repo, branch)
 
     try:
+        sqs = boto3.client('sqs')
+
         if action in ['opened', 'synchronize']:
-            sqs = boto3.client('sqs')
             response = sqs.send_message(
                 QueueUrl=os.environ['BUILD_SQS_URL'],
                 MessageBody=feature_archive_url(repo, branch)
             )
-            print(response)
         
         if action == "closed":
-            sqs = boto3.client('sqs')
             response = sqs.send_message(
                 QueueUrl=os.environ['BUILD_SQS_URL'],
                 MessageBody=dev_archive_url(repo)
             )
-            print(response)
 
-        return {"statusCode": 200}
+        print(response)
+        return {"statusCode": response['HTTPStatusCode']}
 
     except Exception as e:
         print("[ERROR]", e)
