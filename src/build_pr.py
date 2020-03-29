@@ -10,7 +10,7 @@ def handler(event, context):
     branch = _['pull_request']['head']['ref']
     print(_['action'], repo, branch)
 
-    if branch_name_invalid(branch):
+    if branch_type(branch) not in ["feature", "bugfix", "release"]:
         print("branch name invalid")
         return {"statusCode": "406"}
 
@@ -29,7 +29,8 @@ def handler(event, context):
                 QueueUrl=os.environ['BUILD_SQS_URL'],
                 MessageBody=json.dumps({
                     "archive_url": archive_url,
-                    "deploy_type": deploy_type(repo)
+                    "deploy_type": deploy_type(repo),
+                    "branch_type": branch_type(branch)
                 })
             )
 
@@ -48,10 +49,8 @@ def handler(event, context):
 
 # UTILS
 
-def branch_name_invalid(branch):
-    if branch.split("/")[0] in ["feature", "bugfix", "release"]:
-        return False
-    return True
+def branch_type(branch):
+    return branch.split("/")[0]
 
 
 def deploy_type(repo_full_name):
