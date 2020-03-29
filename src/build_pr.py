@@ -39,7 +39,7 @@ def handler(event, context):
 
 
 def deploy_type(repo_full_name):
-    repo_name = repo_full_name.split("/")
+    repo_name = repo_full_name.split("/")[-1]
     return repo_name.split("-")[1]
 
 
