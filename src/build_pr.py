@@ -32,6 +32,7 @@ def handler(event, context):
                     "archive_url": archive_url,
                     "deploy_type": deploy_type(repo),
                     "branch_type": branch_type(branch)
+                    "pull_request": _['action']
                 })
             )
 
