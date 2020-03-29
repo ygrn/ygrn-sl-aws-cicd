@@ -4,6 +4,7 @@ import os
 
 
 def handler(event, context):
+    # POST from github webhook triggered by Pull Request 
     _ = json.loads(event['body'])
     repo = _['pull_request']['head']['repo']['full_name']
     branch = _['pull_request']['head']['ref']
@@ -23,10 +24,10 @@ def handler(event, context):
         if archive_url:
             r = sqs.send_message(
                 QueueUrl=os.environ['BUILD_SQS_URL'],
-                MessageBody={
+                MessageBody=json.dumps({
                     "archive_url": archive_url,
                     "deploy_type": deploy_type(repo)
-                }
+                })
             )
 
         print(r)
