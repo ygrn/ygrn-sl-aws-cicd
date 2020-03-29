@@ -31,7 +31,7 @@ def handler(event, context):
                 MessageBody=json.dumps({
                     "archive_url": archive_url,
                     "deploy_type": deploy_type(repo),
-                    "branch_type": branch_type(branch)
+                    "branch_type": branch_type(branch),
                     "pull_request": _['action']
                 })
             )
@@ -68,4 +68,3 @@ def feature_archive_url(repo, branch):
 def dev_archive_url(repo):
     # builds url to dev branch archive .zip
     return "https://github.com/%s/archive/dev.zip" % repo
-    
