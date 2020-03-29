@@ -4,15 +4,18 @@ import os
 
 
 def handler(event, context):
-    # POST from github webhook triggered by Pull Request 
+    # POST from github webhook triggered by PR 
     _ = json.loads(event['body'])
     repo = _['pull_request']['head']['repo']['full_name']
     branch = _['pull_request']['head']['ref']
     print(_['action'], repo, branch)
 
-    sqs = boto3.client('sqs')
+    if branch_name_invalid:
+        print("branch name invalid")
+        return {"statusCode": "406"}
 
     try:
+        sqs = boto3.client('sqs')
         archive_url = None
 
         if _['action'] in ['opened', 'synchronize']:
@@ -30,13 +33,25 @@ def handler(event, context):
                 })
             )
 
-        print(r)
-        return {"statusCode": r['ResponseMetadata']['HTTPStatusCode']}
+            print(r)
+            return {"statusCode": r['ResponseMetadata']['HTTPStatusCode']}
+        
+        else:
+            # only build on opening, committing to, or closing PR
+            return {"statusCode": "200"}
+    
 
     except Exception as e:
         _ = e.__dict__
         print(e)
         return {"statusCode": _['response']['ResponseMetadata']['HTTPStatusCode']}
+
+# UTILS
+
+def branch_name_invalid(branch):
+    if branch.split("/")[0] in ["feature", "bugfix", "release"]:
+        return False
+    return True
 
 
 def deploy_type(repo_full_name):
