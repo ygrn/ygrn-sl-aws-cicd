@@ -4,33 +4,43 @@ import os
 
 
 def handler(event, context):
-    body = json.loads(event['body'])
-    action = body['action']
-    repo = body['pull_request']['head']['repo']['full_name']
-    branch = body['pull_request']['head']['ref']
-    print(action, repo, branch)
+    _ = json.loads(event['body'])
+    repo = _['pull_request']['head']['repo']['full_name']
+    branch = _['pull_request']['head']['ref']
+    print(_['action'], repo, branch)
 
     sqs = boto3.client('sqs')
 
     try:
-        if action in ['opened', 'synchronize']:
+        archive_url = None
+
+        if _['action'] in ['opened', 'synchronize']:
             archive_url = feature_archive_url(repo, branch)
         
-        if action == "closed":
+        if _['action'] == "closed":
             archive_url = dev_archive_url(repo)
 
-        response = sqs.send_message(
-            QueueUrl=os.environ['BUILD_SQS_URL'],
-            MessageBody=archive_url
-        )
+        if archive_url:
+            r = sqs.send_message(
+                QueueUrl=os.environ['BUILD_SQS_URL'],
+                MessageBody={
+                    "archive_url": archive_url,
+                    "deploy_type": deploy_type(repo)
+                }
+            )
 
-        print(response)
-        return {"statusCode": response['ResponseMetadata']['HTTPStatusCode']}
+        print(r)
+        return {"statusCode": r['ResponseMetadata']['HTTPStatusCode']}
 
     except Exception as e:
-        err = e.__dict__
+        _ = e.__dict__
         print(e)
-        return {"statusCode": err['response']['ResponseMetadata']['HTTPStatusCode']}
+        return {"statusCode": _['response']['ResponseMetadata']['HTTPStatusCode']}
+
+
+def deploy_type(repo_full_name):
+    repo_name = repo_full_name.split("/")
+    return repo_name.split("-")[1]
 
 
 def feature_archive_url(repo, branch):
