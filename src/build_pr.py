@@ -68,3 +68,4 @@ def feature_archive_url(repo, branch):
 def dev_archive_url(repo):
     # builds url to dev branch archive .zip
     return "https://github.com/%s/archive/dev.zip" % repo
+    
