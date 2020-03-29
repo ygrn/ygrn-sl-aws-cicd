@@ -10,7 +10,7 @@ def handler(event, context):
     branch = _['pull_request']['head']['ref']
     print(_['action'], repo, branch)
 
-    if branch_name_invalid:
+    if branch_name_invalid(branch):
         print("branch name invalid")
         return {"statusCode": "406"}
 
