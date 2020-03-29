@@ -22,6 +22,7 @@ def handler(event, context):
             archive_url = feature_archive_url(repo, branch)
         
         if _['action'] == "closed":
+            # either PR was merged (dev branch updated), or closed (without changes)
             archive_url = dev_archive_url(repo)
 
         if archive_url:
